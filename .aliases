@@ -1,0 +1,57 @@
+# .aliases
+
+# variables
+
+# package manager
+pacMan="dnf"
+install="install"
+remove="remove"
+update="upgrade"
+
+#set history size to unlimited
+HISTSIZE= HISTFILESIZE=
+
+# aliases
+alias up="sudo $pacMan $update"
+alias i="sudo $pacMan $install"
+alias r="sudo $pacMan $remove"
+
+# permanently delete file or directory
+pdel(){
+# loop through provided files and directory
+for toDel in "$@"
+do
+# check if given argument is file of directory
+if [[ -d $toDel ]]; then
+find $toDel -type f -exec shred -uvfz {} + && rm -rf $toDel
+elif [[ -f $toDel ]]; then
+shred -uvfz $toDel
+else
+echo "argument provided is neither file nor directory"
+fi
+done
+}
+
+alias del="trash $@"
+alias restore="trash-restore"
+alias gadd="git add ."
+alias gcommit="git commit -m"
+alias gremote="git remote add origin"
+alias gpush="git push origin main -u"
+alias gpull="git pull origin main -u"
+alias off="shutdown -h now"
+# download youtube video
+alias yt="youtube-dl --add-metadata -ic"
+# download youtube audio
+alias yta="youtube-dl --add-metadata -xic"
+# jump to dir
+alias fcd='fcd() { cd "$(find -type d 2>/dev/null ! -path "*/node_modules*" | fzf )" ;}; fcd'
+# open file in text editor
+fed() {
+$EDITOR "$(find -type f 2>/dev/null ! -path "*/node_modules*" | fzf)" 
+}
+alias ls="ls -A"
+# find dir or file
+fd(){
+find -name "$1" ! -path "*/node_modules*"
+}
